@@ -1,7 +1,5 @@
-import os
 import sqlalchemy as sq
 
-from dotenv import load_dotenv, find_dotenv
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -48,17 +46,6 @@ class Black_list(Base):
     black_list_id = sq.Column(sq.Integer, sq.ForeignKey('users.user_id'), nullable=False)
 
 
-def create_connection():
-    load_dotenv(find_dotenv())
-    USER = os.getenv('user')
-    PASSWORD = os.getenv('password')
-    BDNAME = os.getenv('bdname')
-    DSN = f'postgresql://{USER}:{PASSWORD}@localhost:5432/{BDNAME}'
-    engine = sq.create_engine(DSN)
-    return engine
-
-
 def create_tables(engine):
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
-
