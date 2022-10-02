@@ -6,7 +6,7 @@ if __name__ == '__main__':
     for event in longpoll.listen():
         if event.type == VkBotEventType.MESSAGE_NEW:
             VTinder = Bot(event)
-  
+
             if VTinder.text == "привет":
                 VTinder.start()
             elif VTinder.text == "Найти":

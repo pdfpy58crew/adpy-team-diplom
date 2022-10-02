@@ -4,16 +4,16 @@ import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 
-token = ''
+token = 'vk1.a.GnI3SSl0PBNmukAiPtKyyvm9gbZ6NdE6YGilCCGrpmvIMg_uGwD4bGB61Y4NrvaTGryvSSg6nYxTVCys62ALhin0GNOGmhsGoJbpZk-l2cOMNdXnJeSWeYbcnFZFEKPTaHvji_75-inntsGgm32vackYy7E4pNWBKRpBXaoUISraiio7MkLaO8qNmum6gXSA'
 group_id = 216235876
 
 vk = vk_api.VkApi(token=token)
 longpoll = VkBotLongPoll(vk, group_id)
 
 ###KEYBOARDS###
-keyboard = VkKeyboard(one_time=False)
-keyboard.add_button('Найти', color=VkKeyboardColor.SECONDARY)
-keyboard.add_button('Избранное', color=VkKeyboardColor.POSITIVE)
+keyboard_ontime = VkKeyboard(one_time=False)
+keyboard_ontime.add_button('Найти', color=VkKeyboardColor.SECONDARY)
+keyboard_ontime.add_button('Избранное', color=VkKeyboardColor.POSITIVE)
 
 keyboard_inline = VkKeyboard(inline=True)
 keyboard_inline.add_button('В избранное', color=VkKeyboardColor.POSITIVE)
@@ -37,22 +37,23 @@ class Bot:
 
     def _write_msg(self, text, attachment:str=None, keyboard=None):
         """Отправка сообщения"""
-        vk.method('messages.send', {'user_id': self.user_id, 'message': text,  'random_id': randrange(10 ** 7), 'keyboard': keyboard, 'attachment': attachment,})
-        return True
+        response = vk.method('messages.send', {'user_id': self.user_id, 'message': text,  'random_id': randrange(10 ** 7), 'keyboard': keyboard, 'attachment': attachment,})
+        return response
 
     def start(self):
-        """Сборка приветствия"""
+        """Сборка приветствия
+        :return: id сообщения или код ошибки"""
         message = f"Хай, {self.user_id}, давай найдем тебе пару. Дави 'Найти', и испытай удачу!"
-        keyboard=keyboard.get_keyboard
-        self._write_msg(message, keyboard=keyboard())
-        return True
+        keyboard = keyboard_ontime.get_keyboard
+        response = self._write_msg(message, keyboard=keyboard())
+        return response
 
     def like_user(self):
         """Добавление в Избранное"""
         message = 'Добавлено в Избранное, продолжим?'
         # VK_api.like(user_id)
-        self._write_msg(message)
-        return True
+        response = self._write_msg(message)
+        return response
 
     def next_user(self):
         """Отправка анкеты претендента пользователю"""
@@ -60,15 +61,15 @@ class Bot:
         message = f"Павел Дуров\nhttps://vk.com/id1"
         attachment = 'photo1_376599151,photo1_456264771,photo1_263219735'
         keyboard = keyboard_inline.get_keyboard
-        self._write_msg(message, attachment=attachment, keyboard=keyboard())
-        return True
+        response = self._write_msg(message, attachment=attachment, keyboard=keyboard())
+        return response
 
     def favorite_list(self):
         """Получение списка Избранного"""
         # DB.get_favorites(self.user_id)
         message = "Список избранного..."
-        self._write_msg(message)
-        return True
+        response = self._write_msg(message)
+        return response
 
     def __user_link(self, user_id:str):
         """конструктор ссылки на пользователя"""
