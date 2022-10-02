@@ -1,9 +1,13 @@
+import os
 import sqlalchemy as sq
-from sqlalchemy.orm import declarative_base, relationship
+
+from dotenv import load_dotenv, find_dotenv
+from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
-#пользователи VK
+
+# пользователи VK
 class Users(Base):
     __tablename__ = 'users'
 
@@ -15,10 +19,8 @@ class Users(Base):
     city = sq.Column(sq.String(length=30))
     user_link = sq.Column(sq.String(length=150))
 
-    # def __str__(self):
-    #     return (f'User {self.user_id} : {self.first_name} {self.last_name}')
 
-#фотографии
+# фотографии
 class Photos(Base):
     __tablename__ = 'photos'
 
@@ -27,7 +29,8 @@ class Photos(Base):
     likes = sq.Column(sq.Integer)
     user_id = sq.Column(sq.Integer, sq.ForeignKey('users.user_id', ondelete='CASCADE'))
 
-#список избранных
+
+# список избранных
 class Favorites(Base):
     __tablename__ = 'favorites'
 
@@ -35,7 +38,8 @@ class Favorites(Base):
     user_id = sq.Column(sq.Integer, sq.ForeignKey('users.user_id'), nullable=False)
     favorite_user_id = sq.Column(sq.Integer, sq.ForeignKey('users.user_id'), nullable=False)
 
-#черный список
+
+# черный список
 class Black_list(Base):
     __tablename__ = 'black_list'
 
@@ -43,9 +47,18 @@ class Black_list(Base):
     user_id = sq.Column(sq.Integer, sq.ForeignKey('users.user_id'), nullable=False)
     black_list_id = sq.Column(sq.Integer, sq.ForeignKey('users.user_id'), nullable=False)
 
+
+def create_connection():
+    load_dotenv(find_dotenv())
+    USER = os.getenv('user')
+    PASSWORD = os.getenv('password')
+    BDNAME = os.getenv('bdname')
+    DSN = f'postgresql://{USER}:{PASSWORD}@localhost:5432/{BDNAME}'
+    engine = sq.create_engine(DSN)
+    return engine
+
+
 def create_tables(engine):
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
-
-
 
