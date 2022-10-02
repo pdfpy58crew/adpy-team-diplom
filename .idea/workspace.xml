@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d3d59309-7838-4d86-857d-1985adb7a9e8" name="Changes" comment="Перенес из main в DB скрипт подключения к БД, убрал лишнее">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DB/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/DB/models.py" afterDir="false" />
+    <list default="true" id="d3d59309-7838-4d86-857d-1985adb7a9e8" name="Changes" comment="перенес в отдельный файл функцию по соединению с БД + декоратор">
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -97,7 +95,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664712186591</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="перенес в отдельный файл функцию по соединению с БД + декоратор">
+      <created>1664717104061</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1664717104061</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -114,6 +119,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Создание БД" />
     <MESSAGE value="Перенес из main в DB скрипт подключения к БД, убрал лишнее" />
-    <option name="LAST_COMMIT_MESSAGE" value="Перенес из main в DB скрипт подключения к БД, убрал лишнее" />
+    <MESSAGE value="перенес в отдельный файл функцию по соединению с БД + декоратор" />
+    <option name="LAST_COMMIT_MESSAGE" value="перенес в отдельный файл функцию по соединению с БД + декоратор" />
   </component>
 </project>
