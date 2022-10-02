@@ -16,5 +16,5 @@ if __name__ == '__main__':
             elif VTinder.text == "Избранное":
                 VTinder.favorite_list()
             else:
-                VTinder._write_msg("Не поняла Вашего ответа")
+                VTinder._write_msg("Не поняла Вашего ответа. Напиши мне 'привет' ;)")
    
