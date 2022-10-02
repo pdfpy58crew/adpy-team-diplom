@@ -5,7 +5,8 @@ from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_bot.bot_logger import bot_logger
 
-token = 'vk1.a.GnI3SSl0PBNmukAiPtKyyvm9gbZ6NdE6YGilCCGrpmvIMg_uGwD4bGB61Y4NrvaTGryvSSg6nYxTVCys62ALhin0GNOGmhsGoJbpZk-l2cOMNdXnJeSWeYbcnFZFEKPTaHvji_75-inntsGgm32vackYy7E4pNWBKRpBXaoUISraiio7MkLaO8qNmum6gXSA'
+
+token = ''
 group_id = 216235876
 
 vk = vk_api.VkApi(token=token)
@@ -28,9 +29,6 @@ class Bot:
         self.text = self.event['text']
         self.user_id = self.event['from_id']
 
-    def log_convers(self):
-        """логирование"""
-        pass
 
     def read_msg(self, event):
         """Распаковка сообщения"""
@@ -58,7 +56,7 @@ class Bot:
     def like_user(self):
         """Добавление в Избранное"""
         message = 'Добавлено в Избранное, продолжим?'
-        # VK_api.like(user_id)
+        # BD.add_like(user_id)
         response = self._write_msg(message)
         return [response, self.user_id]
 
@@ -80,11 +78,11 @@ class Bot:
         response = self._write_msg(message)
         return [response, self.user_id]
 
-    def __user_link(self, user_id:str):
+    def __get_user_link(self, user_id:str):
         """конструктор ссылки на пользователя"""
         return 'https://vk.com/' + user_id
 
-    def __foto_list(self, user_id:str):
+    def __get_foto_list(self, user_id:str):
         """конструктор вложения с фотографиями"""
-        # DB.fotos()
+        # DB.get_fotos()
         pass
