@@ -4,7 +4,7 @@ import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 
-token = 'vk1.a.GnI3SSl0PBNmukAiPtKyyvm9gbZ6NdE6YGilCCGrpmvIMg_uGwD4bGB61Y4NrvaTGryvSSg6nYxTVCys62ALhin0GNOGmhsGoJbpZk-l2cOMNdXnJeSWeYbcnFZFEKPTaHvji_75-inntsGgm32vackYy7E4pNWBKRpBXaoUISraiio7MkLaO8qNmum6gXSA'
+token = ''
 group_id = 216235876
 
 vk = vk_api.VkApi(token=token)
