@@ -28,6 +28,8 @@ class Bot:
         self.event = event.obj['message']
         self.text = self.event['text']
         self.user_id = self.event['from_id']
+        self.is_keyboard = event.obj['client_info']['keyboard']
+        self.actual_id = None
 
 
     def read_msg(self, event):
@@ -37,7 +39,10 @@ class Bot:
 
     def _write_msg(self, text, attachment:str=None, keyboard=None):
         """Отправка сообщения"""
-        response = vk.method('messages.send', {'user_id': self.user_id, 'message': text,  'random_id': randrange(10 ** 7), 'keyboard': keyboard, 'attachment': attachment,})
+        try:
+            response = vk.method('messages.send', {'user_id': self.user_id, 'message': text,  'random_id': randrange(10 ** 7), 'keyboard': keyboard, 'attachment': attachment,})
+        except vk_api.exceptions.ApiError as error_msg:
+            response = error_msg
         return response
 
     @bot_logger
@@ -48,15 +53,16 @@ class Bot:
                     Если тебе кто-то понравится, добавь его в Избранное. Ты в любой момент сможешь получить доступ к списку понравившихся аккаунтов, нажав кнопку 'Избранное'\n
                     Если тебе не нравится подобранный аккаунт - просто жми 'Найти'
                     Готов? Тогда дави 'Найти', и испытай удачу!\n """
-        keyboard = keyboard_ontime.get_keyboard
-        response = self._write_msg(message, keyboard=keyboard())
+        if self.is_keyboard:
+            keyboard = keyboard_ontime.get_keyboard()
+        response = self._write_msg(message, keyboard=keyboard)
         return [response, self.user_id]
 
     @bot_logger
     def like_user(self):
         """Добавление в Избранное"""
         message = 'Добавлено в Избранное, продолжим?'
-        # BD.add_like(user_id)
+        # BD.add_like(self.actual_id)
         response = self._write_msg(message)
         return [response, self.user_id]
 
@@ -64,6 +70,7 @@ class Bot:
     def next_user(self):
         """Отправка анкеты претендента пользователю"""
         # user = VK_api.roll()
+        # self.actual_id = user.id
         message = f"Павел Дуров\nhttps://vk.com/id1"
         attachment = 'photo1_376599151,photo1_456264771,photo1_263219735'
         keyboard = keyboard_inline.get_keyboard
