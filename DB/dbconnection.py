@@ -125,7 +125,7 @@ if __name__ == "__main__":
     # user = add_new_user(matched_user_info)
     # print(check_users(1321))
     # add_to_favorites(user_info, matched_user_info)
-    # print(check_black_list(11111))
+    print(check_black_list(11111))
     # add_to_blacklist(user_info, matched_user_info)
     # print(check_favorites(13221))
     # pprint(favorites_list_output(132))
