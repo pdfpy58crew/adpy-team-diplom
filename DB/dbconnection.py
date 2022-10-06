@@ -64,7 +64,7 @@ def add_photos(user_photo_info):
 
 @dbconnect
 def add_to_favorites(user_info, matched_user_info):
-    '''Добавляем пользователя в Избранное'''
+    '''Добавляем пользователя в Избранное, если пользователь отсутсвует'''
     session = Session()
     if not check_users(matched_user_info['user_id']):
         add_new_user(matched_user_info)
