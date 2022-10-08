@@ -3,7 +3,7 @@ from pprint import pprint
 
 from sqlalchemy.orm import sessionmaker, scoped_session
 from dotenv import load_dotenv, find_dotenv
-from models import *
+from DB.models import *
 
 # from vk_acs_2.py import get_my_information, get_photos, search_friends
 
