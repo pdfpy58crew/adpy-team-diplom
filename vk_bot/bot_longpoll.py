@@ -68,7 +68,7 @@ class Bot:
         return response
 
     def _get_user(self, user_id):
-        """запрос данных пользователя. 
+        """запрос данных пользователя.
         :return:str имя пользователя сообщения"""
         response = self.vk.method('users.get', {'user_ids': user_id})
         name = response[0]['first_name']
@@ -89,7 +89,8 @@ class Bot:
 
     @bot_logger
     def like_user(self, user_id):
-        """Добавление в Избранное. Добавляет последнюю анкету в список избранного БД"""
+        """Добавление в Избранное.
+        Добавляет последнюю анкету в список избранного БД"""
         photo = self.__get_foto_list(self.friend)
         db.add_photos(self.friend, photo)
         db.add_to_favorites(self.user_info, self.friend)
@@ -122,7 +123,7 @@ class Bot:
             if not db.check_black_list(friend['user_id']) and not db.check_favorites(friend['user_id']):
                 self.friend = friend
                 break
-            
+
         if self.friend:
             message = f"{self.friend['first_name']} {self.friend['last_name']}\n{self.friend['user_link']}\n"
             attachment = self.__get_foto_list(self.friend['user_id'])
