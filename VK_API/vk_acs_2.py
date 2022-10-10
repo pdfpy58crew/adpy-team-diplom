@@ -43,11 +43,17 @@ class Vk_api_access():
     
     def search_friends(self, user_info): 
         result =[]
+        if user_info['sex'] == 1:
+            sex = 2
+        elif user_info['sex'] == 2:
+            sex = 1
+        else:
+            sex = 0
         friends = self.tools.get_all(
             'users.search', 
             100,
             {'hometown': user_info['city'],
-              'sex': user_info['gender'],
+              'sex': sex,
               'birth_year': user_info['age'],
               'has_photo': 1,
               })       
@@ -55,7 +61,7 @@ class Vk_api_access():
                 'first_name':friend['first_name'],
                 'last_name':friend['last_name'],
                 'user_link':f"https://vk.com/id{friend['id']}"} for friend in friends['items'] if 
-                 friend['can_access_closed'] == True]
+                 (friend['can_access_closed'] == True and friend['friend_status'] == 0)]
         return result
     
     def flat_generator(self, friends_list):
