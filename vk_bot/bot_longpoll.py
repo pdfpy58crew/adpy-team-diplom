@@ -25,8 +25,10 @@ class Bot:
 
     def __init__(self) -> None:
         load_dotenv(find_dotenv())
-        self.vk = vk_api.VkApi(token=os.getenv('G_TOKEN'))
-        self.longpoll = VkBotLongPoll(self.vk, os.getenv('G_ID'))
+        TOKEN = os.getenv('G_TOKEN')
+        G_ID = os.getenv('G_ID')
+        self.vk = vk_api.VkApi(token=TOKEN)
+        self.longpoll = VkBotLongPoll(self.vk, G_ID)
         self.vk_api = Vk_api_access()
         self.user_info = None
         self.friends = []
