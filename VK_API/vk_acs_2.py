@@ -5,7 +5,7 @@ import operator
 class Vk_api_access():
 
     def __init__(self):
-        self.token_user = ''
+        self.token_user = 'ae8765185e78516418047c54a9a3be250d2d802db3470c287338769b7343e1f719d3a2a6c214308ce3462'
         self.vk = vk_api.VkApi(token = self.token_user)
         self.tools = vk_api.VkTools(self.vk)
 
@@ -39,25 +39,34 @@ class Vk_api_access():
         if len(photo_album)>3:
             photo_album = photo_album[:photo_numb]    
         photo_links = [link['photo_link'] for link in photo_album]
-        return photo_links
+        return photo_links  
     
     def search_friends(self, user_info): 
         result =[]
+        if user_info['gender'] ==1:
+            sex = 2
+        elif user_info['gender'] ==2:
+            sex = 1
+        
         friends = self.tools.get_all(
             'users.search', 
             100,
             {'hometown': user_info['city'],
-              'sex': user_info['gender'],
+              'sex': sex,
               'birth_year': user_info['age'],
               'has_photo': 1,
+              'fields':'can_access_closed,friend_status'
               })       
         result =[{'user_id':friend['id'],
                 'first_name':friend['first_name'],
                 'last_name':friend['last_name'],
                 'user_link':f"https://vk.com/id{friend['id']}"} for friend in friends['items'] if 
-                 friend['can_access_closed'] == True]
+                 (friend['can_access_closed'] == True and friend['friend_status'] == 0)]
         return result
     
     def flat_generator(self, friends_list):
         for i in friends_list:
             yield i
+
+user = Vk_api_access()
+print(user.search_friends(user.get_user_information()))
