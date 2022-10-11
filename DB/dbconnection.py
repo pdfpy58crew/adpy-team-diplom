@@ -1,19 +1,12 @@
-import os
-from pprint import pprint
+from options import BD_NAME, BD_PASSWORD, BD_USER
+import sqlalchemy as sq
 
 from sqlalchemy.orm import sessionmaker, scoped_session
-from dotenv import load_dotenv, find_dotenv
-from DB.models import *
-
-# from vk_acs_2.py import get_my_information, get_photos, search_friends
+from DB.models import Users, Photos, Favorites, Black_list
 
 
 def create_connection():
-    load_dotenv(find_dotenv())
-    USER = os.getenv('user')
-    PASSWORD = os.getenv('password')
-    BDNAME = os.getenv('bdname')
-    DSN = f'postgresql://{USER}:{PASSWORD}@localhost:5432/{BDNAME}'
+    DSN = f'postgresql://{BD_USER}:{BD_PASSWORD}@localhost:5432/{BD_NAME}'
     engine = sq.create_engine(DSN)
     return engine
 
@@ -38,6 +31,7 @@ def dbconnect(func):
     return _dbconnect
 
 
+# ФУНКЦИИ ДЛЯ РАБОТЫ С БД
 @dbconnect
 def add_new_user(user_info):
     '''Добавляем нового пользователя в таблицу Users'''
@@ -117,15 +111,3 @@ def favorites_list_output(user_id):
         favorites_list.append({'id': user.user_id, 'first_name': user.first_name, 'last_name': user.last_name,
                                'user_link': user.user_link})
     return favorites_list
-
-
-if __name__ == "__main__":
-    matched_user_info = dict(user_id=888, first_name='qasd', last_name='qzxc', city=15, age=97)
-    user_info = dict(user_id=1321, first_name='asd', last_name='zxc', city=5, age=7)
-    # user = add_new_user(matched_user_info)
-    # print(check_users(1321))
-    # add_to_favorites(user_info, matched_user_info)
-    print(check_black_list(11111))
-    # add_to_blacklist(user_info, matched_user_info)
-    # print(check_favorites(13221))
-    # pprint(favorites_list_output(132))

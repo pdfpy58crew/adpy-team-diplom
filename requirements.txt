@@ -1,0 +1,3 @@
+python-dotenv==0.21.0
+SQLAlchemy==1.4.40
+vk_api==11.9.9
