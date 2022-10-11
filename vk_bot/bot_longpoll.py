@@ -1,5 +1,7 @@
 from random import randrange
+from dotenv import load_dotenv, find_dotenv
 
+import os
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
@@ -7,10 +9,6 @@ from vk_bot.bot_logger import bot_logger
 from VK_API.vk_acs_2 import Vk_api_access
 
 import DB.dbconnection as db
-
-
-G_TOKEN = 'vk1.a.GnI3SSl0PBNmukAiPtKyyvm9gbZ6NdE6YGilCCGrpmvIMg_uGwD4bGB61Y4NrvaTGryvSSg6nYxTVCys62ALhin0GNOGmhsGoJbpZk-l2cOMNdXnJeSWeYbcnFZFEKPTaHvji_75-inntsGgm32vackYy7E4pNWBKRpBXaoUISraiio7MkLaO8qNmum6gXSA'
-G_ID = 216235876
 
 
 ###KEYBOARDS###
@@ -25,15 +23,16 @@ keyboard_inline.add_button('в избранное', color=VkKeyboardColor.POSITI
 
 class Bot:
 
-
     def __init__(self) -> None:
-        self.vk = vk_api.VkApi(token=G_TOKEN)
+        load_dotenv(find_dotenv())
+        TOKEN = os.getenv('G_TOKEN')
+        G_ID = os.getenv('G_ID')
+        self.vk = vk_api.VkApi(token=TOKEN)
         self.longpoll = VkBotLongPoll(self.vk, G_ID)
         self.vk_api = Vk_api_access()
         self.user_info = None
         self.friends = []
         self.friend = None
-
 
     def listen(self):
         for event in self.longpoll.listen():
@@ -51,24 +50,29 @@ class Bot:
                 else:
                     self._write_msg(user_id, "Не поняла Вашего ответа. Напиши мне 'привет' ;)")
 
-
     def _write_msg(self, user_id, text, attachment:str=None, keyboard=None, forward_msg=None):
         """Отправка сообщения
         :return:str № отправленного сообщения или описание ошибки VK"""
         try:
-            response = self.vk.method('messages.send', {'user_id': user_id, 'message': text,  'random_id': randrange(10 ** 7), 'keyboard': keyboard, 'attachment': attachment, 'forward_messages': forward_msg})
+            response = self.vk.method(
+                'messages.send', {
+                    'user_id': user_id,
+                    'message': text,
+                    'random_id': randrange(10 ** 7),
+                    'keyboard': keyboard,
+                    'attachment': attachment,
+                    'forward_messages': forward_msg
+                    })
         except vk_api.exceptions.ApiError as error_msg:
             response = error_msg
         return response
 
-
     def _get_user(self, user_id):
-        """запрос данных пользователя. 
+        """запрос данных пользователя.
         :return:str имя пользователя сообщения"""
         response = self.vk.method('users.get', {'user_ids': user_id})
         name = response[0]['first_name']
         return name
-
 
     @bot_logger
     def start(self, user_id):
@@ -83,15 +87,16 @@ class Bot:
         response = self._write_msg(user_id, message, keyboard=keyboard)
         return [response, user_id]
 
-
     @bot_logger
     def like_user(self, user_id):
-        """Добавление в Избранное. Добавляет последнюю анкету в список избранного БД"""
+        """Добавление в Избранное.
+        Добавляет последнюю анкету в список избранного БД"""
+        photo = self.__get_foto_list(self.friend)
+        db.add_photos(self.friend, photo)
         db.add_to_favorites(self.user_info, self.friend)
         message = f'Прекрасный выбор! {self.friend["first_name"]} {self.friend["last_name"]} уже добавлено в Избранное, продолжим?'
         response = self._write_msg(user_id, message)
         return [response, user_id]
-
 
     @bot_logger
     def next_user(self, user_id):
@@ -118,7 +123,7 @@ class Bot:
             if not db.check_black_list(friend['user_id']) and not db.check_favorites(friend['user_id']):
                 self.friend = friend
                 break
-            
+
         if self.friend:
             message = f"{self.friend['first_name']} {self.friend['last_name']}\n{self.friend['user_link']}\n"
             attachment = self.__get_foto_list(self.friend['user_id'])
@@ -128,7 +133,6 @@ class Bot:
             message = "Ууупс, не нашел..."
             response = self._write_msg(user_id, message)
         return [response, user_id]
-
 
     @bot_logger
     def favorite_list(self, user_id):
@@ -146,11 +150,9 @@ class Bot:
         response = self._write_msg(user_id, message)
         return [response, user_id]
 
-
     def __get_user_link(self, user_id):
         """конструктор ссылки на пользователя"""
         return 'https://vk.com/' + user_id
-
 
     def __get_foto_list(self, user_id):
         """конструктор вложения с фотографиями"""

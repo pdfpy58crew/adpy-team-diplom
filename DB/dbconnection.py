@@ -3,7 +3,7 @@ import sqlalchemy as sq
 
 from sqlalchemy.orm import sessionmaker, scoped_session
 from dotenv import load_dotenv, find_dotenv
-from models import Users, Photos, Favorites, Black_list
+from DB.models import Users, Photos, Favorites, Black_list
 
 
 def create_connection():
