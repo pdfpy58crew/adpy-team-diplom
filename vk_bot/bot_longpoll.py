@@ -1,7 +1,6 @@
 from random import randrange
-from dotenv import load_dotenv, find_dotenv
+from options import G_TOKEN, G_ID
 
-import os
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
@@ -24,10 +23,7 @@ keyboard_inline.add_button('в избранное', color=VkKeyboardColor.POSITI
 class Bot:
 
     def __init__(self) -> None:
-        load_dotenv(find_dotenv())
-        TOKEN = os.getenv('G_TOKEN')
-        G_ID = os.getenv('G_ID')
-        self.vk = vk_api.VkApi(token=TOKEN)
+        self.vk = vk_api.VkApi(token=G_TOKEN)
         self.longpoll = VkBotLongPoll(self.vk, G_ID)
         self.vk_api = Vk_api_access()
         self.user_info = None
@@ -91,8 +87,6 @@ class Bot:
     def like_user(self, user_id):
         """Добавление в Избранное.
         Добавляет последнюю анкету в список избранного БД"""
-        photo = self.__get_foto_list(self.friend)
-        db.add_photos(self.friend, photo)
         db.add_to_favorites(self.user_info, self.friend)
         message = f'Прекрасный выбор! {self.friend["first_name"]} {self.friend["last_name"]} уже добавлено в Избранное, продолжим?'
         response = self._write_msg(user_id, message)
@@ -122,6 +116,7 @@ class Bot:
         for friend in self.friends:
             if not db.check_black_list(friend['user_id']) and not db.check_favorites(friend['user_id']):
                 self.friend = friend
+                db.add_new_user(self.friend)
                 break
 
         if self.friend:

@@ -1,12 +1,12 @@
 import vk_api
 import operator
+from options import U_TOKEN
 
 
 class Vk_api_access():
 
     def __init__(self):
-        self.token_user = ''
-        self.vk = vk_api.VkApi(token = self.token_user)
+        self.vk = vk_api.VkApi(token = U_TOKEN)
         self.tools = vk_api.VkTools(self.vk)
    
     def get_user_information(self):

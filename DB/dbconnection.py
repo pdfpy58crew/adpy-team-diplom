@@ -1,17 +1,12 @@
-import os
+from options import BD_NAME, BD_PASSWORD, BD_USER
 import sqlalchemy as sq
 
 from sqlalchemy.orm import sessionmaker, scoped_session
-from dotenv import load_dotenv, find_dotenv
 from DB.models import Users, Photos, Favorites, Black_list
 
 
 def create_connection():
-    load_dotenv(find_dotenv())
-    USER = os.getenv('user')
-    PASSWORD = os.getenv('password')
-    BDNAME = os.getenv('bdname')
-    DSN = f'postgresql://{USER}:{PASSWORD}@localhost:5432/{BDNAME}'
+    DSN = f'postgresql://{BD_USER}:{BD_PASSWORD}@localhost:5432/{BD_NAME}'
     engine = sq.create_engine(DSN)
     return engine
 
